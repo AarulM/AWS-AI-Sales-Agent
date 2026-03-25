@@ -11,10 +11,14 @@ from database import KnowledgeBaseDB, BotSettingsDB
 from scraper import WebScraper
 from document_processor import DocumentProcessor
 from auth import ClientAuth
+from twilio_voice import router as voice_router
 
 load_dotenv()
 
 app = FastAPI(title="Vantix Voice Agent")
+
+# Include Twilio voice router
+app.include_router(voice_router)
 
 app.add_middleware(
     CORSMiddleware,
