@@ -23,6 +23,10 @@ class WebScraper:
         Returns:
             Dict with scraped content organized by category
         """
+        # Validate and fix URL
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+        
         print(f"🕷️  Starting scrape of: {url}")
         
         knowledge = {
