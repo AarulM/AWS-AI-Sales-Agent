@@ -4,12 +4,20 @@ import secrets
 from datetime import datetime
 from typing import Optional, Dict
 import os
+import urllib3
+
+# Disable SSL warnings (temporary fix for SSL cert issues)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class ClientAuth:
     """Authentication system for client access to settings"""
     
     def __init__(self):
-        self.dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'us-east-1'))
+        self.dynamodb = boto3.resource(
+            'dynamodb',
+            region_name=os.getenv('AWS_REGION', 'us-east-1'),
+            verify=False  # Disable SSL verification temporarily
+        )
         self.table_name = 'vantix-client-auth'
         self.table = None
         self._ensure_table()

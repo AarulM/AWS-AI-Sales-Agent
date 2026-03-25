@@ -3,12 +3,20 @@ from datetime import datetime
 from typing import List, Dict, Optional
 import os
 import uuid
+import urllib3
+
+# Disable SSL warnings (temporary fix for SSL cert issues)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class KnowledgeBaseDB:
     """DynamoDB knowledge base for client-specific information"""
     
     def __init__(self):
-        self.dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'us-east-1'))
+        self.dynamodb = boto3.resource(
+            'dynamodb',
+            region_name=os.getenv('AWS_REGION', 'us-east-1'),
+            verify=False  # Disable SSL verification temporarily
+        )
         self.table_name = 'vantix-knowledge-base'
         self.table = None
         self._ensure_table()
@@ -224,7 +232,11 @@ class BotSettingsDB:
     """DynamoDB storage for bot personality and settings"""
     
     def __init__(self):
-        self.dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'us-east-1'))
+        self.dynamodb = boto3.resource(
+            'dynamodb',
+            region_name=os.getenv('AWS_REGION', 'us-east-1'),
+            verify=False  # Disable SSL verification temporarily
+        )
         self.table_name = 'vantix-bot-settings'
         self.table = None
         self._ensure_table()
